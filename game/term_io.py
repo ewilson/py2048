@@ -11,10 +11,10 @@ def display(board):
             else:
                 row_list.append(' '*6)
 
-        rows.append('|'.join(row_list))
+        rows.append('|' + '|'.join(row_list) + '|')
     w = len(rows[0])
     row_delim = '\n' + '-'*w + '\n'
-    return row_delim.join(rows)
+    return row_delim + row_delim.join(rows) + row_delim
 
 class _Getch:
     def __call__(self):
