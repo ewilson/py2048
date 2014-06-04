@@ -6,6 +6,7 @@ class Board(object):
         self.tiles = {}
 
     def slide(self, dir):
+        prior = self.tiles.copy()
         if dir == 'L':
             self._slide_left()
         elif dir == 'R':
@@ -22,6 +23,7 @@ class Board(object):
             self._slide_left()
             self._flip_horiz()
             self._transpose()
+        return not self.tiles == prior
 
     def place_random(self):
         empties = self._find_empty_squares()

@@ -10,5 +10,5 @@ if __name__ == '__main__':
         os.system('cls' if os.name == 'nt' else 'clear')
         print display(b)
         direction = get_input()
-        b.slide(direction)
-        success = b.place_random()
+        if b.slide(direction):
+            success = b.place_random()
