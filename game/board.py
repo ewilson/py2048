@@ -4,6 +4,7 @@ from random import choice,randint
 class Board(object):
     def __init__(self):
         self.tiles = {}
+        self.score = 0
 
     def slide(self, dir):
         prior = self.tiles.copy()
@@ -67,7 +68,9 @@ class Board(object):
             merges = 0
             for idx, key in enumerate(group):
                 if self.tiles[key] == previous_val:
-                    self.tiles[previous_key] = 2*previous_val
+                    new_tile_val = 2*previous_val
+                    self.tiles[previous_key] = new_tile_val
+                    self.score += new_tile_val
                     del self.tiles[key]
                     merges += 1
                     previous_val = -1

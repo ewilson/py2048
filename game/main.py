@@ -5,6 +5,7 @@ from term_io import display, get_input
 def display_new_board(b):
     os.system('cls' if os.name == 'nt' else 'clear')
     print display(b)
+    print b.score
 
 if __name__ == '__main__':
     b = Board()
