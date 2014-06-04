@@ -10,8 +10,24 @@ class Board(object):
     def slide_left(self):
         self._slide((0,1))
 
+    def slide_right(self):
+        self._flip_horiz()
+        self._slide((0,1))
+        self._flip_horiz()
+
     def slide_up(self):
         self._slide((1,0))
+
+    def slide_down(self):
+        self._flip_vert()
+        self._slide((1,0))
+        self._flip_vert()
+
+    def _flip_horiz(self):
+        self.tiles = {(x,3-y):self.tiles[(x,y)] for (x,y) in self.tiles}
+
+    def _flip_vert(self):
+        self.tiles = {(3-x,y):self.tiles[(x,y)] for (x,y) in self.tiles}
 
     def _slide(self,axis):
         primary = axis[0]
