@@ -23,6 +23,7 @@ class Board(object):
             self._slide_left()
             self._flip_horiz()
             self._transpose()
+
         return not self.tiles == prior
 
     def place_random(self):
@@ -32,7 +33,17 @@ class Board(object):
             val = randint(1,2)*2
             self.tiles[key] = val
         return empties
-    
+
+    def check_for_moves(self):
+        if self._find_empty_squares():
+            return True
+        for row in range(3):
+            for col in range(3):
+                current = self.tiles[(row,col)]
+                if current == self.tiles[(row+1,col)] or current == self.tiles[(row,col+1)]:
+                    return True
+        return False
+
     def _flip_horiz(self):
         self.tiles = {(x,3-y):self.tiles[(x,y)] for (x,y) in self.tiles}
 
