@@ -1,29 +1,36 @@
 from itertools import groupby
+from random import choice,randint
 
 class Board(object):
     def __init__(self):
         self.tiles = {}
 
-    def slide_left(self):
-        self._slide()
+    def slide(self, dir):
+        if dir == 'L':
+            self._slide_left()
+        elif dir == 'R':
+            self._flip_horiz()
+            self._slide_left()
+            self._flip_horiz()
+        elif dir == 'U':
+            self._transpose()
+            self._slide_left()
+            self._transpose()
+        elif dir == 'D':
+            self._transpose()
+            self._flip_horiz()
+            self._slide_left()
+            self._flip_horiz()
+            self._transpose()
 
-    def slide_right(self):
-        self._flip_horiz()
-        self._slide()
-        self._flip_horiz()
-
-    def slide_up(self):
-        self._transpose()
-        self._slide()
-        self._transpose()
-
-    def slide_down(self):
-        self._transpose()
-        self._flip_horiz()
-        self._slide()
-        self._flip_horiz()
-        self._transpose()
-
+    def place_random(self):
+        empties = self._find_empty_squares()
+        if empties:
+            key = choice(empties)
+            val = randint(1,2)*2
+            self.tiles[key] = val
+        return empties
+    
     def _flip_horiz(self):
         self.tiles = {(x,3-y):self.tiles[(x,y)] for (x,y) in self.tiles}
 
@@ -38,7 +45,7 @@ class Board(object):
             groups.append(sorted(list(group), key=lambda x: x[1]))
         return groups
 
-    def _slide(self):
+    def _slide_left(self):
         groups = self._find_groups()
 
         for group in groups:
@@ -46,7 +53,6 @@ class Board(object):
             previous_key = None
             merges = 0
             for idx, key in enumerate(group):
-                print previous_val
                 if self.tiles[key] == previous_val:
                     self.tiles[previous_key] = 2*previous_val
                     del self.tiles[key]
@@ -60,3 +66,11 @@ class Board(object):
                         del self.tiles[key]
                     previous_key = newkey
                     previous_val = self.tiles[newkey]
+
+    def _find_empty_squares(self):
+        empties = []
+        for row in range(4):
+            for col in range(4):
+                if (row,col) not in self.tiles:
+                    empties.append((row,col))
+        return empties

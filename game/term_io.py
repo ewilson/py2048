@@ -1,3 +1,4 @@
+import sys,tty,termios
 from board import Board
 
 def display(board):
@@ -14,6 +15,33 @@ def display(board):
     w = len(rows[0])
     row_delim = '\n' + '-'*w + '\n'
     return row_delim.join(rows)
+
+class _Getch:
+    def __call__(self):
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        try:
+            tty.setraw(sys.stdin.fileno())
+            ch = sys.stdin.read(3)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+        return ch
+
+def get_input():
+    inkey = _Getch()
+    while(1):
+        k=inkey()
+        if k!='':break
+    if k=='\x1b[A':
+        return "U"
+    elif k=='\x1b[B':
+        return "D"
+    elif k=='\x1b[C':
+        return "R"
+    elif k=='\x1b[D':
+        return "L"
+    else:
+        exit()
 
 if __name__ == '__main__':
     b = Board()
